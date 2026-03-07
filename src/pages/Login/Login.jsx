@@ -117,14 +117,32 @@ const Login = () => {
               className="language-option"
               onClick={() => changeLanguage("en")}
             >
-              🇬🇧 English
+              <img
+                src="https://flagcdn.com/16x12/gb.png"
+                srcSet="https://flagcdn.com/32x24/gb.png 2x, https://flagcdn.com/48x36/gb.png 3x"
+                width="16"
+                height="12"
+                alt="United Kingdom"
+                className="flag"
+              />
+              <span className="flag-emoji" aria-hidden="true">🇬🇧</span>
+              <span>English</span>
             </div>
 
             <div
               className="language-option"
               onClick={() => changeLanguage("zh")}
             >
-              🇨🇳 中文
+              <img
+                src="https://flagcdn.com/16x12/cn.png"
+                srcSet="https://flagcdn.com/32x24/cn.png 2x, https://flagcdn.com/48x36/cn.png 3x"
+                width="16"
+                height="12"
+                alt="China"
+                className="flag"
+              />
+              <span className="flag-emoji" aria-hidden="true">🇨🇳</span>
+              <span>中文</span>
             </div>
 
           </div>

@@ -346,11 +346,25 @@ body {
 }
 
 .language-option{
+  display:flex;
+  align-items:center;
+  gap:8px;
   padding:10px 14px;
   font-size:14px;
   cursor:pointer;
   transition:.2s;
   color: #1e3b70;
+}
+
+.flag {
+  display: none;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.08);
+}
+
+.flag-emoji {
+  display: inline;
+  line-height: 1;
 }
 
 .language-option:hover{
@@ -427,5 +441,15 @@ body {
 
   .login-title {
     font-size: 20px;
+  }
+}
+
+@media (min-width: 481px) {
+  .flag {
+    display: inline-block;
+  }
+
+  .flag-emoji {
+    display: none;
   }
 }
