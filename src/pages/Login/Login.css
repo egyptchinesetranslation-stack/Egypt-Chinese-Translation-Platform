@@ -151,6 +151,8 @@ body {
   unicode-bidi: plaintext;
   font-family: Arial, Helvetica, sans-serif;
   letter-spacing:2px;
+  -webkit-text-security: disc;
+
 }
 
 .password-input::-webkit-credentials-auto-fill-button,

@@ -196,11 +196,10 @@ const Login = () => {
 
               <input
                 className="password-input"
-                type={showPassword ? "text" : "password"}
+                type="text"
                 placeholder="••••••••"
                 autoComplete="current-password"
                 dir="ltr"
-                inputMode="text"
               />
 
               <svg
