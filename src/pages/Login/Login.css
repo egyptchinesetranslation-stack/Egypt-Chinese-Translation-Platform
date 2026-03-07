@@ -413,12 +413,20 @@ body {
 
 @media (max-width: 480px) {
   .login-container {
-    padding: 16px;
+    padding: 28px 16px 20px;
+    justify-content: flex-start;
   }
 
   .login-card {
     padding: 24px 20px;
-    width: 100%;
+    width: min(100%, 360px);
+    border-radius: 18px;
+  }
+
+  .page-footer {
+    margin-top: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .logo-image {
