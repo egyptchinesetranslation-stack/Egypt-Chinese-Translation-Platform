@@ -11,6 +11,11 @@ const Login = () => {
   const [language, setLanguage] = useState("en");
   const [showLangMenu, setShowLangMenu] = useState(false);
 
+  const isIOS = typeof navigator !== "undefined" && (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+  );
+
   useEffect(() => {
 
     const cookieLang = document.cookie
@@ -195,7 +200,7 @@ const Login = () => {
               <input
                 className="password-input"
                 type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
+                placeholder={isIOS ? "********" : "••••••••"}
               />
 
               <svg
