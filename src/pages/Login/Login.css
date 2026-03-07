@@ -137,25 +137,29 @@ body {
 
 .password-input {
   padding-right: 44px;
-  font-family: Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: plaintext;
+  line-height: normal;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .input-wrapper .password-input::placeholder {
   color: #94a3b8;
   opacity: 1;
-  letter-spacing: 1px;
-}
-
-.password-input::placeholder{
-  letter-spacing:2px;
-  line-height:1.2;
-  direction:ltr;
-  text-align:left;
+  direction: ltr;
+  text-align: left;
+  letter-spacing: 2px;
+  line-height: normal;
 }
 
 .input-wrapper .password-input::-webkit-input-placeholder {
   color: #94a3b8;
   opacity: 1;
+  direction: ltr;
+  text-align: left;
   -webkit-text-fill-color: #94a3b8;
 }
 
@@ -170,12 +174,6 @@ body {
   pointer-events: none;
   position: absolute;
   right: 0;
-}
-.password-input{
-  padding-right:44px;
-  font-family: Arial, Helvetica, sans-serif;
-  direction:ltr;
-  text-align:left;
 }
 .input-wrapper input:focus {
   border-color: #f97316;
