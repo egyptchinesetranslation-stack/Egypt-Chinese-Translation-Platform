@@ -137,6 +137,18 @@ body {
 
 .password-input {
   padding-right: 44px;
+  font-family: Arial, sans-serif;
+}
+
+.password-input::placeholder {
+  color: #94a3b8;
+  opacity: 1;
+  letter-spacing: 1px;
+}
+
+.password-input::-webkit-input-placeholder {
+  color: #94a3b8;
+  opacity: 1;
 }
 
 .password-input::-ms-reveal,
