@@ -135,6 +135,23 @@ body {
   transition: border-color 0.2s;
 }
 
+.password-input {
+  padding-right: 44px;
+}
+
+.password-input::-ms-reveal,
+.password-input::-ms-clear {
+  display: none;
+}
+
+.password-input::-webkit-credentials-auto-fill-button,
+.password-input::-webkit-textfield-decoration-container {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
+
 .input-wrapper input:focus {
   border-color: #f97316;
 }
