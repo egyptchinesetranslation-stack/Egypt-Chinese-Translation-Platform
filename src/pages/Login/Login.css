@@ -149,6 +149,8 @@ body {
 .password-input::placeholder{
   letter-spacing:2px;
   line-height:1.2;
+  direction:ltr;
+  text-align:left;
 }
 
 .input-wrapper .password-input::-webkit-input-placeholder {
@@ -172,6 +174,8 @@ body {
 .password-input{
   padding-right:44px;
   font-family: Arial, Helvetica, sans-serif;
+  direction:ltr;
+  text-align:left;
 }
 .input-wrapper input:focus {
   border-color: #f97316;

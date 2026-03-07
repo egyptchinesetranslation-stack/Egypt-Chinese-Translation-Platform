@@ -201,6 +201,7 @@ const Login = () => {
                 className="password-input"
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
+                dir="ltr"
               />
 
               <svg
