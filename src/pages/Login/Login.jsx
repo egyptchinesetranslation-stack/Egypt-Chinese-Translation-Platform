@@ -200,6 +200,7 @@ const Login = () => {
                 placeholder="••••••••"
                 autoComplete="current-password"
                 dir="ltr"
+                inputMode="text"
               />
 
               <svg

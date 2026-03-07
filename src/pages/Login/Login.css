@@ -146,9 +146,10 @@ body {
 }
 .password-input{
   padding:12px 44px 12px 40px;
-  direction:ltr;
-  text-align:left;
-  font-family:Arial, Helvetica, sans-serif;
+  direction:ltr !important;
+  text-align:left !important;
+  unicode-bidi: plaintext;
+  font-family: Arial, Helvetica, sans-serif;
   letter-spacing:2px;
 }
 
