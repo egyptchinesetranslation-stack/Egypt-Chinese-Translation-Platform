@@ -203,7 +203,7 @@ const Login = () => {
                 placeholder="••••••••"
                 autoComplete="current-password"
                 dir="ltr"
-                style={{ textAlign: 'left', direction: 'ltr' }}
+                style={{ textAlign: 'left', direction: 'ltr', unicodeBidi: 'bidi-override' }}
               />
 
               <svg
