@@ -202,6 +202,8 @@ const Login = () => {
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 autoComplete="current-password"
+                dir="ltr"
+                style={{ textAlign: 'left', direction: 'ltr' }}
               />
 
               <svg
