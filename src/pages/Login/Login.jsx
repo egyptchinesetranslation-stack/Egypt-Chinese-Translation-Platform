@@ -11,10 +11,7 @@ const Login = () => {
   const [language, setLanguage] = useState("en");
   const [showLangMenu, setShowLangMenu] = useState(false);
 
-  const isIOS = typeof navigator !== "undefined" && (
-    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
-  );
+
 
   useEffect(() => {
 
@@ -198,12 +195,12 @@ const Login = () => {
               </svg>
 
               <input
-                className={`password-input ${isIOS ? 'ios-input' : ''}`}
+                className="password-input"
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 autoComplete="current-password"
                 dir="ltr"
-                style={{ textAlign: 'left', direction: 'ltr', unicodeBidi: 'bidi-override' }}
+                inputMode="text"
               />
 
               <svg

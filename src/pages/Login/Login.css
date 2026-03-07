@@ -124,34 +124,10 @@ body {
   align-items: center;
 }
 
-.input-wrapper input {
-  width: 100%;
-  padding: 12px 14px 12px 40px; /* Space for left icon */
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  font-size: 14px;
-  color: #334155;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.input-wrapper .password-input {
-  padding-right: 44px;
-  padding-left: 40px;
-  font-family: Arial, Helvetica, sans-serif;
-  direction: ltr !important;
-  text-align: left !important;
-  unicode-bidi: bidi-override !important;
-  line-height: normal;
-  -webkit-appearance: none;
-  appearance: none;
-}
 
 .input-wrapper .password-input::placeholder {
   color: #94a3b8;
   opacity: 1;
-  direction: ltr !important;
-  text-align: left !important;
   letter-spacing: 2px;
   line-height: normal;
 }
@@ -167,6 +143,14 @@ body {
 .password-input::-ms-reveal,
 .password-input::-ms-clear {
   display: none;
+}
+.password-input{
+  padding:12px 44px 12px 40px;
+  direction:ltr !important;
+  text-align:left !important;
+  unicode-bidi: plaintext;
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing:2px;
 }
 
 .password-input::-webkit-credentials-auto-fill-button,
