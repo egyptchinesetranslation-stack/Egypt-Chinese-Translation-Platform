@@ -433,6 +433,7 @@ body {
   .login-card {
     padding: 24px 20px;
     width: 100%;
+    animation: form-reveal 0.95s ease-out 0.35s forwards;
   }
 
   .logo-image {
