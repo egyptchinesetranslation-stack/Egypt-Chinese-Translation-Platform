@@ -200,7 +200,7 @@ const Login = () => {
               <input
                 className="password-input"
                 type={showPassword ? "text" : "password"}
-                placeholder={isIOS ? "********" : "••••••••"}
+                placeholder="••••••••"
               />
 
               <svg
