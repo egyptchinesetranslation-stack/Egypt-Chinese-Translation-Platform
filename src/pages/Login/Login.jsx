@@ -198,13 +198,10 @@ const Login = () => {
               </svg>
 
               <input
-                className="password-input"
+                className={`password-input ${isIOS ? 'ios-input' : ''}`}
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
-                dir="ltr"
-                lang="en"
                 autoComplete="current-password"
-                style={{ direction: 'ltr', textAlign: 'left', unicodeBidi: 'bidi-override' }}
               />
 
               <svg
