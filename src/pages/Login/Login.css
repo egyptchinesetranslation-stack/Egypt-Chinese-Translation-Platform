@@ -135,12 +135,13 @@ body {
   transition: border-color 0.2s;
 }
 
-.password-input {
+.input-wrapper .password-input {
   padding-right: 44px;
+  padding-left: 40px;
   font-family: Arial, Helvetica, sans-serif;
   direction: ltr;
   text-align: left;
-  unicode-bidi: plaintext;
+  unicode-bidi: bidi-override;
   line-height: normal;
   -webkit-appearance: none;
   appearance: none;

@@ -204,7 +204,7 @@ const Login = () => {
                 dir="ltr"
                 lang="en"
                 autoComplete="current-password"
-                style={{ direction: 'ltr', textAlign: 'left' }}
+                style={{ direction: 'ltr', textAlign: 'left', unicodeBidi: 'bidi-override' }}
               />
 
               <svg
