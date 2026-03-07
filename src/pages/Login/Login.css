@@ -347,3 +347,22 @@ body {
     transform:translateY(0);
   }
 }
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 16px;
+  }
+
+  .login-card {
+    padding: 24px 20px;
+    width: 100%;
+  }
+
+  .logo-image {
+    max-width: 160px;
+  }
+
+  .login-title {
+    font-size: 20px;
+  }
+}
