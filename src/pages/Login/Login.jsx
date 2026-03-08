@@ -29,11 +29,11 @@ const Login = () => {
   useEffect(() => {
 
     if(language === "zh"){
-      document.title = "埃及华人翻译平台";
+      document.title = "埃及华人翻译平台 | 登录";
       document.documentElement.lang = "zh";
     }
     else{
-      document.title = "Egypt Chinese Translation Platform";
+      document.title = "Egypt Chinese Translation Platform | Login";
       document.documentElement.lang = "en";
     }
 
@@ -268,7 +268,7 @@ const Login = () => {
 
         <p className="signup-text">
           {text[language].signup} 
-          <Link to="/register"> {text[language].create}</Link>
+          <Link to="/Signup"> {text[language].create}</Link>
         </p>
 
       </div>
