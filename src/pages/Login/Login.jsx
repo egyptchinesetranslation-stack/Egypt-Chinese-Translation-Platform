@@ -60,7 +60,7 @@ const Login = () => {
 
     en: {
       title: "Welcome Back",
-      subtitle: "Login to access your translation dashboard",
+      subtitle: "Login to access your account",
       email: "Email Address",
       password: "Password",
       forgot: "Forgot password?",
@@ -77,7 +77,7 @@ const Login = () => {
 
     zh: {
       title: "欢迎回来",
-      subtitle: "登录以访问您的翻译平台",
+      subtitle: "登录以访问您的账户",
       email: "电子邮箱",
       password: "密码",
       forgot: "忘记密码？",

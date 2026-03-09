@@ -1,0 +1,18 @@
+.sidebar{
+  width:220px;
+  height:100vh;
+  background:#f8f9fb;
+  padding:20px;
+}
+
+.sidebar nav{
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+
+.sidebar a{
+  text-decoration:none;
+  color:#333;
+  font-weight:500;
+}
