@@ -14,6 +14,7 @@ function Register() {
   const [role, setRole] = useState(null); // 'user' or 'translator'
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState("");
   const [messageType, setMessageType] = useState("");
   const [formMessage, setFormMessage] = useState("");
 
@@ -66,6 +67,8 @@ function Register() {
       dailyPrice: "Daily Translation Price",
       certifications: "Upload Certifications",
       uploadPdfImage: "Upload PDF/Image",
+      uploadDone: "Done",
+      selectedFile: "Selected:",
       haveAccount: "Already have an account?",
       login: "Login",
       fullNameRequired: "Please enter your full name.",
@@ -82,7 +85,9 @@ function Register() {
       tourPriceRequired: "Please enter tour guide price.",
       dailyPriceRequired: "Please enter daily translation price.",
       certificationsRequired: "Please upload your certifications.",
-      createAccountSuccess: "Your account is ready to be submitted."
+      createAccountSuccess: "Your account is ready to be submitted.",
+      or: "OR CONTINUE WITH",
+      googleSignup: "Signup with Google"
     },
     zh: {
       title: "创建您的账户",
@@ -109,6 +114,8 @@ function Register() {
       dailyPrice: "日常翻译价格",
       certifications: "上传证书",
       uploadPdfImage: "上传 PDF/图片",
+      uploadDone: "已上传",
+      selectedFile: "已选择:",
       haveAccount: "已有账户？",
       login: "登录",
       fullNameRequired: "请输入姓名。",
@@ -125,7 +132,9 @@ function Register() {
       tourPriceRequired: "请输入导游价格。",
       dailyPriceRequired: "请输入日常翻译价格。",
       certificationsRequired: "请上传证书。",
-      createAccountSuccess: "账户信息已准备好提交。"
+      createAccountSuccess: "账户信息已准备好提交。",
+      or: "或使用以下方式继续",
+      googleSignup: "使用谷歌注册"
     },
   };
 
@@ -153,6 +162,14 @@ function Register() {
       document.documentElement.lang = "en";
     }
   }, [language]);
+
+  useEffect(() => {
+    return () => {
+      if (avatarPreview) {
+        URL.revokeObjectURL(avatarPreview);
+      }
+    };
+  }, [avatarPreview]);
 
   const changeLanguage = (lang) => {
     setLanguage(lang);
@@ -182,6 +199,19 @@ function Register() {
       setFormMessage("");
       setMessageType("");
     }
+  };
+
+  const handleProfilePhotoChange = (event) => {
+    const file = event.target.files?.[0] ?? null;
+    handleTranslatorInputChange("profilePhoto", file);
+
+    setAvatarPreview((prev) => {
+      if (prev) {
+        URL.revokeObjectURL(prev);
+      }
+
+      return file ? URL.createObjectURL(file) : "";
+    });
   };
 
   const handleCreateAccount = () => {
@@ -535,16 +565,20 @@ function Register() {
                 <div className="register-flex-row align-end">
                    <div className="register-upload-area">
                       <label>{currentText.profilePhoto}</label>
-                      <label className="register-avatar-box" htmlFor="avatar-upload">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                          <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
+                      <label className={`register-avatar-box ${translatorForm.profilePhoto ? "has-file" : ""}`} htmlFor="avatar-upload">
+                        {avatarPreview ? (
+                          <img src={avatarPreview} alt="Profile preview" className="register-avatar-preview" />
+                        ) : (
+                          <svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                          </svg>
+                        )}
                         <input
                           type="file"
                           id="avatar-upload"
                           accept="image/*"
-                          onChange={(e) => handleTranslatorInputChange("profilePhoto", e.target.files?.[0] ?? null)}
+                          onChange={handleProfilePhotoChange}
                         />
                       </label>
                    </div>
@@ -686,8 +720,10 @@ function Register() {
                    </div>
                    <div className="register-input-col" style={{flex: '0.25'}}>
                       <label>{currentText.certifications}</label>
-                      <label className="register-file-upload" htmlFor="cert-upload">
-                        {currentText.uploadPdfImage}
+                      <label className={`register-file-upload ${translatorForm.certifications ? "has-file" : ""}`} htmlFor="cert-upload">
+                        {translatorForm.certifications
+                          ? `${currentText.selectedFile} ${translatorForm.certifications.name}`
+                          : currentText.uploadPdfImage}
                         <input
                           type="file"
                           id="cert-upload"
@@ -755,6 +791,29 @@ function Register() {
             <button className="register-btn-primary mt-compact" onClick={handleCreateAccount}>
               {currentText.createAccount}
             </button>
+
+            {role === "user" && (
+              <>
+                <div className="register-divider">
+                  <span>{currentText.or}</span>
+                </div>
+
+                <button type="button" className="register-google-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 48 48"
+                    width="20"
+                    height="20"
+                  >
+                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.73 1.22 9.24 3.6l6.9-6.9C35.89 2.3 30.34 0 24 0 14.62 0 6.54 5.48 2.63 13.44l8.04 6.24C12.4 13.02 17.72 9.5 24 9.5z"/>
+                    <path fill="#4285F4" d="M46.5 24.5c0-1.66-.15-3.26-.42-4.8H24v9.1h12.7c-.55 2.96-2.22 5.47-4.73 7.15l7.27 5.65C43.95 37.7 46.5 31.7 46.5 24.5z"/>
+                    <path fill="#FBBC05" d="M10.67 28.68a14.6 14.6 0 010-9.36l-8.04-6.24A23.97 23.97 0 000 24c0 3.86.92 7.52 2.63 10.92l8.04-6.24z"/>
+                    <path fill="#34A853" d="M24 48c6.34 0 11.66-2.1 15.55-5.73l-7.27-5.65c-2.02 1.35-4.62 2.15-8.28 2.15-6.28 0-11.6-3.52-13.33-8.68l-8.04 6.24C6.54 42.52 14.62 48 24 48z"/>
+                  </svg>
+                  {currentText.googleSignup}
+                </button>
+              </>
+            )}
           </div>
         )}
 

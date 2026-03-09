@@ -260,6 +260,11 @@
   gap: 10px;
   width: 100%;
 }
+
+.register-flex-row > .register-input-col {
+  min-width: 0;
+}
+
 .align-end {
   align-items: flex-end;
 }
@@ -289,6 +294,8 @@
   justify-content: center;
   cursor: pointer;
   transition: 0.2s;
+  position: relative;
+  overflow: hidden;
 }
 .register-avatar-box:hover {
   background-color: #e2e8f0;
@@ -300,6 +307,32 @@
 }
 .register-avatar-box input[type="file"] {
   display: none;
+}
+
+.register-avatar-box.has-file {
+  border-color: #22c55e;
+  background-color: #f0fdf4;
+}
+
+.register-avatar-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.register-upload-check {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #16a34a;
+  color: #ffffff;
+  font-size: 11px;
+  line-height: 18px;
+  text-align: center;
+  box-shadow: 0 0 0 2px #ffffff;
 }
 
 /* Inputs Label & Fields */
@@ -352,7 +385,9 @@
 .register-file-upload {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 100%;
   padding: 10px 12px;
   border: 1px dashed #cbd5e1;
   border-radius: 6px;
@@ -362,6 +397,10 @@
   font-size: 12px;
   color: #64748b;
   margin: 0 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 40px;
 }
 
 .register-file-upload:hover {
@@ -372,6 +411,12 @@
 
 .register-file-upload input[type="file"] {
   display: none;
+}
+
+.register-file-upload.has-file {
+  border-color: #22c55e;
+  background-color: #f0fdf4;
+  color: #15803d;
 }
 
 .register-input-col input {
@@ -477,6 +522,49 @@
   box-shadow: none;
   cursor: not-allowed;
   opacity: 0.7;
+}
+
+.register-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.register-divider::before,
+.register-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.register-divider span {
+  padding: 0 10px;
+}
+
+.register-google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.register-google-btn:hover {
+  background-color: #f8fafc;
 }
 
 .mt-compact {
