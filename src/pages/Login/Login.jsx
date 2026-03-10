@@ -10,6 +10,12 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [language, setLanguage] = useState("en");
   const [showLangMenu, setShowLangMenu] = useState(false);
+  const [messageType, setMessageType] = useState("");
+  const [formMessage, setFormMessage] = useState("");
+  const [loginForm, setLoginForm] = useState({
+    email: "",
+    password: "",
+  });
 
 
 
@@ -55,6 +61,70 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
+  const isValidEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  };
+
+  const handleInputChange = (field, value) => {
+    setLoginForm((prev) => ({ ...prev, [field]: value }));
+    if (formMessage) {
+      setFormMessage("");
+      setMessageType("");
+    }
+  };
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    if (!String(loginForm.email).trim()) {
+      setMessageType("error");
+      setFormMessage(currentText.emailRequired);
+      return;
+    }
+
+    if (!isValidEmail(loginForm.email)) {
+      setMessageType("error");
+      setFormMessage(currentText.invalidEmail);
+      return;
+    }
+
+    if (!String(loginForm.password).trim()) {
+      setMessageType("error");
+      setFormMessage(currentText.passwordRequired);
+      return;
+    }
+
+    // TODO: Add Firebase authentication here
+    // Example:
+    // signInWithEmailAndPassword(auth, loginForm.email, loginForm.password)
+    //   .then((userCredential) => {
+    //     setMessageType("success");
+    //     setFormMessage(currentText.loginSuccess);
+    //   })
+    //   .catch((error) => {
+    //     setMessageType("error");
+    //     switch (error.code) {
+    //       case "auth/user-not-found":
+    //         setFormMessage(currentText.userNotFound);
+    //         break;
+    //       case "auth/wrong-password":
+    //         setFormMessage(currentText.wrongPassword);
+    //         break;
+    //       case "auth/too-many-requests":
+    //         setFormMessage(currentText.tooManyRequests);
+    //         break;
+    //       case "auth/user-disabled":
+    //         setFormMessage(currentText.userDisabled);
+    //         break;
+    //       default:
+    //         setFormMessage(currentText.loginError);
+    //     }
+    //   });
+
+    setMessageType("success");
+    setFormMessage(currentText.loginSuccess);
+  };
+
 
   const text = {
 
@@ -72,7 +142,16 @@ const Login = () => {
       create: "Create account",
       privacy: "Privacy Policy",
       terms: "Terms of Service",
-      support: "Support"
+      support: "Support",
+      emailRequired: "Please enter your email address.",
+      invalidEmail: "Please enter a valid email address.",
+      passwordRequired: "Please enter your password.",
+      wrongPassword: "Incorrect password. Please try again.",
+      userNotFound: "No account found with this email.",
+      tooManyRequests: "Too many failed attempts. Please try again later.",
+      userDisabled: "This account has been disabled.",
+      loginError: "Login failed. Please try again.",
+      loginSuccess: "Login successful!"
     },
 
     zh: {
@@ -89,10 +168,21 @@ const Login = () => {
       create: "创建账户",
       privacy: "隐私政策",
       terms: "服务条款",
-      support: "支持"
+      support: "支持",
+      emailRequired: "请输入电子邮箱。",
+      invalidEmail: "请输入有效的电子邮箱地址。",
+      passwordRequired: "请输入密码。",
+      wrongPassword: "密码错误，请重试。",
+      userNotFound: "找不到该邮箱对应的账户。",
+      tooManyRequests: "尝试次数过多，请稍后再试。",
+      userDisabled: "此账户已被禁用。",
+      loginError: "登录失败，请重试。",
+      loginSuccess: "登录成功！"
     }
 
   };
+
+  const currentText = text[language] ?? text.en;
 
 
   return (
@@ -159,13 +249,13 @@ const Login = () => {
           <img src={logoImage} alt="Egypt Chinese Translation Platform" className="logo-image" />
         </div>
 
-        <h2 className="login-title">{text[language].title}</h2>
-        <p className="login-subtitle">{text[language].subtitle}</p>
+        <h2 className="login-title">{currentText.title}</h2>
+        <p className="login-subtitle">{currentText.subtitle}</p>
 
-        <form className="login-form">
+        <form className="login-form" onSubmit={handleLogin}>
 
           <div className="input-group">
-            <label>{text[language].email}</label>
+            <label>{currentText.email}</label>
 
             <div className="input-wrapper">
 
@@ -174,7 +264,12 @@ const Login = () => {
                 <polyline points="22,6 12,13 2,6"/>
               </svg>
 
-              <input type="email" placeholder="zhang.wei@example.com" />
+              <input 
+                type="email" 
+                placeholder="zhang.wei@example.com"
+                value={loginForm.email}
+                onChange={(e) => handleInputChange("email", e.target.value)}
+              />
 
             </div>
           </div>
@@ -183,8 +278,8 @@ const Login = () => {
           <div className="input-group">
 
             <div className="label-row">
-              <label>{text[language].password}</label>
-              <a href="#" className="forgot-password">{text[language].forgot}</a>
+              <label>{currentText.password}</label>
+              <a href="#" className="forgot-password">{currentText.forgot}</a>
             </div>
 
             <div className="input-wrapper">
@@ -196,10 +291,12 @@ const Login = () => {
 
               <input
                 className="password-input"
-                type="text"
+                type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 autoComplete="current-password"
                 dir="ltr"
+                value={loginForm.password}
+                onChange={(e) => handleInputChange("password", e.target.value)}
               />
 
               <svg
@@ -232,19 +329,26 @@ const Login = () => {
 
           <div className="checkbox-group">
             <input type="checkbox" id="keep-logged"/>
-            <label htmlFor="keep-logged">{text[language].keep}</label>
+            <label htmlFor="keep-logged">{currentText.keep}</label>
           </div>
 
+          <p
+            className={`login-form-message ${messageType === "success" ? "success" : "error"} ${
+              formMessage ? "" : "is-hidden"
+            }`}
+          >
+            {formMessage || " "}
+          </p>
 
           <button type="submit" className="signin-btn">
-            {text[language].signin}
+            {currentText.signin}
           </button>
 
         </form>
 
 
         <div className="divider">
-          <span>{text[language].or}</span>
+          <span>{currentText.or}</span>
         </div>
 
 
@@ -262,24 +366,24 @@ const Login = () => {
             <path fill="#34A853" d="M24 48c6.34 0 11.66-2.1 15.55-5.73l-7.27-5.65c-2.02 1.35-4.62 2.15-8.28 2.15-6.28 0-11.6-3.52-13.33-8.68l-8.04 6.24C6.54 42.52 14.62 48 24 48z"/>
           </svg>
 
-          {text[language].google}
+          {currentText.google}
 
         </button>
 
         <p className="signup-text">
-          {text[language].signup} 
-          <Link to="/Signup"> {text[language].create}</Link>
+          {currentText.signup} 
+          <Link to="/Signup"> {currentText.create}</Link>
         </p>
 
       </div>
 
 
       <div className="page-footer">
-        <a href="#">{text[language].privacy}</a>
+        <a href="#">{currentText.privacy}</a>
         <span className="dot">•</span>
-        <a href="#">{text[language].terms}</a>
+        <a href="#">{currentText.terms}</a>
         <span className="dot">•</span>
-        <a href="#">{text[language].support}</a>
+        <a href="#">{currentText.support}</a>
       </div>
 
     </div>
