@@ -70,7 +70,7 @@ function Navbar() {
 
       <div className="navbar-left-section">
         <div className="logo">
-          <img src={logoImage} alt="Egypt Chinese Translation Platform Logo" className="logo-image" />
+          <img src={logoImage} alt="Egypt Chinese Translation Platform Logo" className="logo-images" />
         </div>
 
         <div className={`mobile-menu-icon ${isMobileMenuOpen ? 'open' : ''}`} onClick={toggleMobileMenu}>

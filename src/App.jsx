@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "./pages/Login/Login";
 import Register from "./pages/Signup/Register";
+import NotFound from "./pages/NotFound/NotFound";
 
 /* Chinese Pages */
 import Translators from "./pages/chinese/Translators/Translators";
@@ -61,6 +62,9 @@ function App() {
           <Route path="/translator/profile" element={<Profile />} />
 
         </Route>
+
+        {/* 404 Page */}
+        <Route path="*" element={<NotFound />} />
 
       </Routes>
 
