@@ -156,6 +156,10 @@ body {
   letter-spacing:2px;
 }
 
+.password-hidden {
+  -webkit-text-security: disc;
+}
+
 .password-input::-webkit-credentials-auto-fill-button,
 .password-input::-webkit-textfield-decoration-container {
   visibility: hidden;

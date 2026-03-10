@@ -290,8 +290,8 @@ const Login = () => {
               </svg>
 
               <input
-                className="password-input"
-                type={showPassword ? "text" : "password"}
+                className={`password-input ${!showPassword ? "password-hidden" : ""}`}
+                type="text"
                 placeholder="••••••••"
                 autoComplete="current-password"
                 dir="ltr"
