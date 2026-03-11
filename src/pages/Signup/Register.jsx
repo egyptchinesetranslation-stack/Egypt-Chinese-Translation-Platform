@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { auth, db, googleProvider } from "../../firebase";
 import "./Register.css";
 import backgroundImage from "../../assets/L1.png";
 import languageIcon from "../../assets/language-svgrepo-com.svg";
+import { useAuth } from "../../context/AuthContext";
 import logoImage from "../../assets/Logo.png";
 
 function Register() {
+  const navigate = useNavigate();
+  const { setUserDataManually } = useAuth();
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [language, setLanguage] = useState("en");
+  const [isLoading, setIsLoading] = useState(false);
 
   // States for form logic
   const [step, setStep] = useState(1);
@@ -19,6 +27,7 @@ function Register() {
   const [formMessage, setFormMessage] = useState("");
 
   const [userForm, setUserForm] = useState({
+    profilePhoto: null,
     fullName: "",
     email: "",
     phone: "",
@@ -40,6 +49,8 @@ function Register() {
     dailyPrice: "",
     certifications: null,
   });
+
+  const [userAvatarPreview, setUserAvatarPreview] = useState("");
 
   const text = {
     en: {
@@ -85,7 +96,11 @@ function Register() {
       tourPriceRequired: "Please enter tour guide price.",
       dailyPriceRequired: "Please enter daily translation price.",
       certificationsRequired: "Please upload your certifications.",
-      createAccountSuccess: "Your account is ready to be submitted.",
+      createAccountSuccess: "Account created successfully! Redirecting...",
+      creatingAccount: "Creating account...",
+      emailInUse: "This email is already registered.",
+      weakPassword: "Password should be at least 6 characters.",
+      registrationError: "Registration failed. Please try again.",
       or: "OR CONTINUE WITH",
       googleSignup: "Signup with Google"
     },
@@ -132,7 +147,11 @@ function Register() {
       tourPriceRequired: "请输入导游价格。",
       dailyPriceRequired: "请输入日常翻译价格。",
       certificationsRequired: "请上传证书。",
-      createAccountSuccess: "账户信息已准备好提交。",
+      createAccountSuccess: "账户创建成功！正在跳转...",
+      creatingAccount: "正在创建账户...",
+      emailInUse: "此邮箱已被注册。",
+      weakPassword: "密码至少需要6个字符。",
+      registrationError: "注册失败，请重试。",
       or: "或使用以下方式继续",
       googleSignup: "使用谷歌注册"
     },
@@ -168,8 +187,11 @@ function Register() {
       if (avatarPreview) {
         URL.revokeObjectURL(avatarPreview);
       }
+      if (userAvatarPreview) {
+        URL.revokeObjectURL(userAvatarPreview);
+      }
     };
-  }, [avatarPreview]);
+  }, [avatarPreview, userAvatarPreview]);
 
   const changeLanguage = (lang) => {
     setLanguage(lang);
@@ -193,6 +215,18 @@ function Register() {
     }
   };
 
+  const handleUserProfilePhotoChange = (event) => {
+    const file = event.target.files?.[0] ?? null;
+    handleUserInputChange("profilePhoto", file);
+
+    setUserAvatarPreview((prev) => {
+      if (prev) {
+        URL.revokeObjectURL(prev);
+      }
+      return file ? URL.createObjectURL(file) : "";
+    });
+  };
+
   const handleTranslatorInputChange = (field, value) => {
     setTranslatorForm((prev) => ({ ...prev, [field]: value }));
     if (formMessage) {
@@ -214,7 +248,15 @@ function Register() {
     });
   };
 
-  const handleCreateAccount = () => {
+  // Helper function to upload file to Firebase Storage
+  const uploadFileToStorage = async (file, path) => {
+    const storage = getStorage();
+    const storageRef = ref(storage, path);
+    await uploadBytes(storageRef, file);
+    return await getDownloadURL(storageRef);
+  };
+
+  const handleCreateAccount = async () => {
     const activeForm = role === "translator" ? translatorForm : userForm;
 
     if (!String(activeForm.fullName).trim()) {
@@ -303,8 +345,194 @@ function Register() {
       }
     }
 
-    setMessageType("success");
-    setFormMessage(currentText.createAccountSuccess);
+    // Start Firebase registration
+    setIsLoading(true);
+    setMessageType("");
+    setFormMessage(currentText.creatingAccount);
+
+    try {
+      // Create user with email and password
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        activeForm.email,
+        activeForm.password
+      );
+      const user = userCredential.user;
+
+      let userData;
+
+      if (role === "translator") {
+        let photoURL = "";
+        let certURL = "";
+
+        // Upload profile photo
+        try {
+          console.log("Uploading profile photo...");
+          photoURL = await uploadFileToStorage(
+            translatorForm.profilePhoto,
+            `users/${user.uid}/profilePhoto`
+          );
+          console.log("Profile photo uploaded:", photoURL);
+        } catch (uploadError) {
+          console.error("Error uploading profile photo:", uploadError);
+          // Continue without photo if upload fails
+        }
+
+        // Upload certifications
+        try {
+          console.log("Uploading certifications...");
+          certURL = await uploadFileToStorage(
+            translatorForm.certifications,
+            `users/${user.uid}/certifications/${translatorForm.certifications.name}`
+          );
+          console.log("Certifications uploaded:", certURL);
+        } catch (uploadError) {
+          console.error("Error uploading certifications:", uploadError);
+          // Continue without certifications if upload fails
+        }
+
+        // Translator user data
+        userData = {
+          name: translatorForm.fullName,
+          email: translatorForm.email,
+          role: "translator",
+          phone: translatorForm.phone,
+          photoURL: photoURL,
+          createdAt: serverTimestamp(),
+          experienceYears: parseInt(translatorForm.yearsExp) || 0,
+          bio: translatorForm.shortBio,
+          pricing: {
+            emergency: parseFloat(translatorForm.emergencyPrice) || 0,
+            tourGuide: parseFloat(translatorForm.tourPrice) || 0,
+            daily: parseFloat(translatorForm.dailyPrice) || 0
+          },
+          certifications: certURL ? [
+            {
+              name: translatorForm.certifications.name,
+              fileURL: certURL
+            }
+          ] : [],
+          avgRating: 0,
+          totalReviews: 0,
+          totalEarnings: 0
+        };
+
+        console.log("Translator userData:", userData);
+      } else {
+        // Chinese user data
+        let userPhotoURL = "";
+
+        // Upload profile photo if provided
+        if (userForm.profilePhoto) {
+          try {
+            console.log("Uploading Chinese user profile photo...");
+            userPhotoURL = await uploadFileToStorage(
+              userForm.profilePhoto,
+              `users/${user.uid}/profilePhoto`
+            );
+            console.log("Profile photo uploaded:", userPhotoURL);
+          } catch (uploadError) {
+            console.error("Error uploading profile photo:", uploadError);
+          }
+        }
+
+        userData = {
+          name: userForm.fullName,
+          email: userForm.email,
+          role: "chinese",
+          phone: userForm.phone,
+          photoURL: userPhotoURL,
+          createdAt: serverTimestamp()
+        };
+      }
+
+      // Save user data to Firestore
+      console.log("Saving to Firestore...");
+      await setDoc(doc(db, "users", user.uid), userData);
+      console.log("Data saved successfully!");
+
+      // حفظ بيانات المستخدم في الكوكيز
+      document.cookie = `user_name=${encodeURIComponent(userData.name || "")}; path=/; max-age=31536000`;
+      document.cookie = `user_photoURL=${encodeURIComponent(userData.photoURL || "")}; path=/; max-age=31536000`;
+      document.cookie = `user_email=${encodeURIComponent(userData.email || "")}; path=/; max-age=31536000`;
+      document.cookie = `user_phone=${encodeURIComponent(userData.phone || "")}; path=/; max-age=31536000`;
+      document.cookie = `user_role=${encodeURIComponent(userData.role || "")}; path=/; max-age=31536000`;
+
+      // Set user data manually in AuthContext to avoid race condition
+      // Replace serverTimestamp with actual date for local state
+      const localUserData = { ...userData, createdAt: new Date() };
+      setUserDataManually(localUserData);
+
+      setMessageType("success");
+      setFormMessage(currentText.createAccountSuccess);
+
+      // Redirect immediately after successful registration
+      if (role === "translator") {
+        navigate("/translator/dashboard", { replace: true });
+      } else {
+        navigate("/dashboard", { replace: true });
+      }
+
+    } catch (error) {
+      console.error("Registration error:", error);
+      setIsLoading(false);
+
+      if (error.code === "auth/email-already-in-use") {
+        setMessageType("error");
+        setFormMessage(currentText.emailInUse);
+      } else if (error.code === "auth/weak-password") {
+        setMessageType("error");
+        setFormMessage(currentText.weakPassword);
+      } else {
+        setMessageType("error");
+        setFormMessage(currentText.registrationError);
+      }
+    }
+  };
+
+  // Handle Google Sign Up
+  const handleGoogleSignup = async () => {
+    setIsLoading(true);
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      // Create Chinese user data for Google sign-in
+      const userData = {
+        name: user.displayName || "",
+        email: user.email,
+        role: "chinese",
+        phone: user.phoneNumber || "",
+        photoURL: user.photoURL || "",
+        createdAt: serverTimestamp()
+      };
+
+      // Save user data to Firestore
+      await setDoc(doc(db, "users", user.uid), userData, { merge: true });
+
+      // حفظ بيانات المستخدم في الكوكيز
+      document.cookie = `user_name=${encodeURIComponent(userData.name || "")}; path=/; max-age=31536000`;
+      document.cookie = `user_photoURL=${encodeURIComponent(userData.photoURL || "")}; path=/; max-age=31536000`;
+      document.cookie = `user_email=${encodeURIComponent(userData.email || "")}; path=/; max-age=31536000`;
+      document.cookie = `user_phone=${encodeURIComponent(userData.phone || "")}; path=/; max-age=31536000`;
+      document.cookie = `user_role=${encodeURIComponent(userData.role || "")}; path=/; max-age=31536000`;
+
+      // Set user data manually in AuthContext to avoid race condition
+      const localUserData = { ...userData, createdAt: new Date() };
+      setUserDataManually(localUserData);
+
+      setMessageType("success");
+      setFormMessage(currentText.createAccountSuccess);
+
+      // Redirect immediately
+      navigate("/dashboard", { replace: true });
+
+    } catch (error) {
+      console.error("Google signup error:", error);
+      setIsLoading(false);
+      setMessageType("error");
+      setFormMessage(currentText.registrationError);
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -446,6 +674,28 @@ function Register() {
             {/* User Form */}
             {role === 'user' && (
               <div className="register-form-grid register-user-layout">
+                {/* Profile Photo Upload for Chinese User */}
+                <div className="register-input-col full-width" style={{ display: 'flex', justifyContent: 'center', marginBottom: 'px' }}>
+                  <div className="register-upload-area">
+                    <label>{currentText.profilePhoto}</label>
+                    <label className={`register-avatar-box ${userForm.profilePhoto ? "has-file" : ""}`} htmlFor="user-avatar-upload">
+                      {userAvatarPreview ? (
+                        <img src={userAvatarPreview} alt="Profile preview" className="register-avatar-preview" />
+                      ) : (
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                          <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                      )}
+                      <input
+                        type="file"
+                        id="user-avatar-upload"
+                        accept="image/*"
+                        onChange={handleUserProfilePhotoChange}
+                      />
+                    </label>
+                  </div>
+                </div>
                 <div className="register-input-col">
                   <label>{currentText.fullName}</label>
                   <input
@@ -788,8 +1038,12 @@ function Register() {
               {formMessage || " "}
             </p>
 
-            <button className="register-btn-primary mt-compact" onClick={handleCreateAccount}>
-              {currentText.createAccount}
+            <button 
+              className="register-btn-primary mt-compact" 
+              onClick={handleCreateAccount}
+              disabled={isLoading}
+            >
+              {isLoading ? currentText.creatingAccount : currentText.createAccount}
             </button>
 
             {role === "user" && (
@@ -798,7 +1052,12 @@ function Register() {
                   <span>{currentText.or}</span>
                 </div>
 
-                <button type="button" className="register-google-btn">
+                <button 
+                  type="button" 
+                  className="register-google-btn"
+                  onClick={handleGoogleSignup}
+                  disabled={isLoading}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 48 48"

@@ -1,20 +1,144 @@
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
+import { useLanguage } from "../../context/LanguageContext";
+
+import logoImage from "../../assets/Logo.png";
+
+import {
+  LayoutDashboard,
+  Briefcase,
+  MessageSquare,
+  User,
+  LogOut,
+  Menu,
+  X
+} from "lucide-react";
+
 import "./Sidebar.css";
 
+const text = {
+  en: {
+    dashboard: "Dashboard",
+    myJobs: "My Jobs",
+    messages: "Messages",
+    account: "ACCOUNT",
+    profile: "Profile",
+    signOut: "Sign Out",
+    pageTitle: "Egypt Chinese Translation Platform | Translator"
+  },
+  zh: {
+    dashboard: "控制面板",
+    myJobs: "我的工作",
+    messages: "消息",
+    account: "账户",
+    profile: "个人资料",
+    signOut: "退出登录",
+    pageTitle: "埃及华人翻译平台 | 翻译员"
+  }
+};
+
 function Sidebar() {
-  return (
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
+  const { language } = useLanguage();
+
+  const t = text[language];
+
+  // Update page title when language changes
+  useEffect(() => {
+    document.title = t.pageTitle;
+    document.documentElement.lang = language;
+  }, [language, t.pageTitle]);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/login");
+  };
+
+  const isActive = (path) => location.pathname === path;
+
+  const closeSidebar = () => setIsOpen(false);
+
+  const SidebarContent = () => (
     <div className="sidebar">
+      {/* Logo */}
+      <div className="sidebar-logo">
+        <img src={logoImage} alt="logo" />
+      </div>
 
-      <h2 className="logo">Translator</h2>
+      {/* Menu */}
+      <div className="sidebar-menu">
+        <Link
+          to="/translator/dashboard"
+          className={`menu-item ${isActive("/translator/dashboard") ? "active" : ""}`}
+          onClick={closeSidebar}
+        >
+          <LayoutDashboard size={20} />
+          <span>{t.dashboard}</span>
+        </Link>
 
-      <nav>
-        <Link to="/translator/dashboard">Dashboard</Link>
-        <Link to="/translator/jobs">My Jobs</Link>
-        <Link to="/translator/messages">Messages</Link>
-        <Link to="/translator/profile">Profile</Link>
-      </nav>
+        <Link
+          to="/translator/jobs"
+          className={`menu-item ${isActive("/translator/jobs") ? "active" : ""}`}
+          onClick={closeSidebar}
+        >
+          <Briefcase size={20} />
+          <span>{t.myJobs}</span>
+        </Link>
 
+        <Link
+          to="/translator/messages"
+          className={`menu-item ${isActive("/translator/messages") ? "active" : ""}`}
+          onClick={closeSidebar}
+        >
+          <MessageSquare size={20} />
+          <span>{t.messages}</span>
+          <div className="badge">5</div>
+        </Link>
+
+        <div className="menu-title">{t.account}</div>
+
+        <Link
+          to="/translator/profile"
+          className={`menu-item ${isActive("/translator/profile") ? "active" : ""}`}
+          onClick={closeSidebar}
+        >
+          <User size={20} />
+          <span>{t.profile}</span>
+        </Link>
+      </div>
+
+      {/* Footer */}
+      <div className="sidebar-footer" onClick={handleLogout}>
+        <LogOut size={20} />
+        <span>{t.signOut}</span>
+      </div>
     </div>
+  );
+
+  return (
+    <>
+      {/* Burger Button for Mobile */}
+      <button className="burger-btn" onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+
+      {/* Desktop Sidebar */}
+      <div className="desktop-sidebar">
+        <SidebarContent />
+      </div>
+
+      {/* Mobile Drawer */}
+      <div className={`mobile-drawer ${isOpen ? "open" : ""}`}>
+        <SidebarContent />
+      </div>
+
+      {/* Overlay */}
+      {isOpen && <div className="overlay" onClick={closeSidebar}></div>}
+    </>
   );
 }
 

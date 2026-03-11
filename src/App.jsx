@@ -1,22 +1,35 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
 
-import Login from "./pages/Login/Login";
-import Register from "./pages/Signup/Register";
-import NotFound from "./pages/NotFound/NotFound";
+import { AuthProvider } from "./context/AuthContext";
+import { LanguageProvider } from "./context/LanguageContext";
+import { ChineseRoute, TranslatorRoute, PublicRoute } from "./components/ProtectedRoute";
+
+// Loading component
+const PageLoader = () => (
+  <div className="page-loader">
+    <div className="spinner"></div>
+  </div>
+);
+
+// Lazy load pages
+const Login = lazy(() => import("./pages/Login/Login"));
+const Register = lazy(() => import("./pages/Signup/Register"));
+const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
 
 /* Chinese Pages */
-import Translators from "./pages/chinese/Translators/Translators";
-import TranslatorProfile from "./pages/chinese/TranslatorProfile/TranslatorProfile";
-import BookTranslator from "./pages/chinese/BookTranslator/BookTranslator";
-import MyRequests from "./pages/chinese/MyRequests/MyRequests";
-import Review from "./pages/chinese/Review/Review";
-import Dashboard from "./pages/chinese/Dashboard/Dashboard";
+const Translators = lazy(() => import("./pages/chinese/Translators/Translators"));
+const TranslatorProfile = lazy(() => import("./pages/chinese/TranslatorProfile/TranslatorProfile"));
+const BookTranslator = lazy(() => import("./pages/chinese/BookTranslator/BookTranslator"));
+const MyRequests = lazy(() => import("./pages/chinese/MyRequests/MyRequests"));
+const Review = lazy(() => import("./pages/chinese/Review/Review"));
+const Dashboard = lazy(() => import("./pages/chinese/Dashboard/Dashboard"));
 
 /* Translator Pages */
-import TranslatorDashboard from "./pages/translator/Dashboard/TranslatorDashboard";
-import MyJobs from "./pages/translator/MyJobs/MyJobs";
-import Messages from "./pages/translator/Messages/Messages";
-import Profile from "./pages/translator/Profile/Profile";
+const TranslatorDashboard = lazy(() => import("./pages/translator/Dashboard/TranslatorDashboard"));
+const MyJobs = lazy(() => import("./pages/translator/MyJobs/MyJobs"));
+const Messages = lazy(() => import("./pages/translator/Messages/Messages"));
+const Profile = lazy(() => import("./pages/translator/Profile/Profile"));
 
 /* Layouts */
 import MainLayout from "./components/layout/MainLayout";
@@ -25,50 +38,54 @@ import TranslatorLayout from "./components/layout/TranslatorLayout";
 function App() {
   return (
     <BrowserRouter>
+      <AuthProvider>
+        <LanguageProvider>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
 
-      <Routes>
+            {/* Auth - Public Routes */}
+            <Route path="/" element={<PublicRoute><Login /></PublicRoute>} />
+            <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+            <Route path="/signup" element={<PublicRoute><Register /></PublicRoute>} />
 
-        {/* Auth */}
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Register />} />
+            {/* Chinese Layout - Protected for Chinese users only */}
+            <Route element={<ChineseRoute><MainLayout /></ChineseRoute>}>
 
-        {/* Chinese Layout */}
-        <Route element={<MainLayout />}>
+              <Route path="/dashboard" element={<Dashboard />} />
 
-          <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/translators" element={<Translators />} />
 
-          <Route path="/translators" element={<Translators />} />
+              <Route path="/translator/:id" element={<TranslatorProfile />} />
 
-          <Route path="/translator/:id" element={<TranslatorProfile />} />
+              <Route path="/book/:id" element={<BookTranslator />} />
 
-          <Route path="/book/:id" element={<BookTranslator />} />
+              <Route path="/my-requests" element={<MyRequests />} />
 
-          <Route path="/my-requests" element={<MyRequests />} />
+              <Route path="/review/:id" element={<Review />} />
 
-          <Route path="/review/:id" element={<Review />} />
+            </Route>
 
-        </Route>
+            {/* Translator Layout - Protected for Translators only */}
+            <Route element={<TranslatorRoute><TranslatorLayout /></TranslatorRoute>}>
 
-        {/* Translator Layout */}
-        <Route element={<TranslatorLayout />}>
+              <Route path="/translator/dashboard" element={<TranslatorDashboard />} />
 
-          <Route path="/translator/dashboard" element={<TranslatorDashboard />} />
+              <Route path="/translator/jobs" element={<MyJobs />} />
 
-          <Route path="/translator/jobs" element={<MyJobs />} />
+              <Route path="/translator/messages" element={<Messages />} />
 
-          <Route path="/translator/messages" element={<Messages />} />
+              <Route path="/translator/profile" element={<Profile />} />
 
-          <Route path="/translator/profile" element={<Profile />} />
+            </Route>
 
-        </Route>
+            {/* 404 Page */}
+            <Route path="*" element={<NotFound />} />
 
-        {/* 404 Page */}
-        <Route path="*" element={<NotFound />} />
-
-      </Routes>
-
-    </BrowserRouter>
+          </Routes>
+        </Suspense>
+      </LanguageProvider>
+    </AuthProvider>
+  </BrowserRouter>
   );
 }
 

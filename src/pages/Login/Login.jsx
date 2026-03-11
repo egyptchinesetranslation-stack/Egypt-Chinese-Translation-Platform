@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db, googleProvider } from "../../firebase";
 import './Login.css';
 import backgroundImage from '../../assets/L1.png';
 import logoImage from '../../assets/Logo.png';
 import languageIcon from '../../assets/language-svgrepo-com.svg';
 
 const Login = () => {
-
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [language, setLanguage] = useState("en");
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [messageType, setMessageType] = useState("");
   const [formMessage, setFormMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
@@ -73,7 +77,7 @@ const Login = () => {
     }
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     if (!String(loginForm.email).trim()) {
@@ -94,35 +98,109 @@ const Login = () => {
       return;
     }
 
-    // TODO: Add Firebase authentication here
-    // Example:
-    // signInWithEmailAndPassword(auth, loginForm.email, loginForm.password)
-    //   .then((userCredential) => {
-    //     setMessageType("success");
-    //     setFormMessage(currentText.loginSuccess);
-    //   })
-    //   .catch((error) => {
-    //     setMessageType("error");
-    //     switch (error.code) {
-    //       case "auth/user-not-found":
-    //         setFormMessage(currentText.userNotFound);
-    //         break;
-    //       case "auth/wrong-password":
-    //         setFormMessage(currentText.wrongPassword);
-    //         break;
-    //       case "auth/too-many-requests":
-    //         setFormMessage(currentText.tooManyRequests);
-    //         break;
-    //       case "auth/user-disabled":
-    //         setFormMessage(currentText.userDisabled);
-    //         break;
-    //       default:
-    //         setFormMessage(currentText.loginError);
-    //     }
-    //   });
+    setIsLoading(true);
+    setFormMessage("");
 
-    setMessageType("success");
-    setFormMessage(currentText.loginSuccess);
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        loginForm.email,
+        loginForm.password
+      );
+
+      // Get user role from Firestore
+      const userDoc = await getDoc(doc(db, "users", userCredential.user.uid));
+      
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setMessageType("success");
+        setFormMessage(currentText.loginSuccess);
+
+        // حفظ بيانات المستخدم في الكوكيز
+        document.cookie = `user_name=${encodeURIComponent(userData.name || "")}; path=/; max-age=31536000`;
+        document.cookie = `user_photoURL=${encodeURIComponent(userData.photoURL || "")}; path=/; max-age=31536000`;
+        document.cookie = `user_email=${encodeURIComponent(userData.email || "")}; path=/; max-age=31536000`;
+        document.cookie = `user_phone=${encodeURIComponent(userData.phone || "")}; path=/; max-age=31536000`;
+        document.cookie = `user_role=${encodeURIComponent(userData.role || "")}; path=/; max-age=31536000`;
+
+        // Redirect based on role immediately
+        if (userData.role === "translator") {
+          navigate("/translator/dashboard", { replace: true });
+        } else {
+          navigate("/dashboard", { replace: true });
+        }
+      } else {
+        setMessageType("error");
+        setFormMessage(currentText.userNotFound);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      setMessageType("error");
+      
+      switch (error.code) {
+        case "auth/user-not-found":
+          setFormMessage(currentText.userNotFound);
+          break;
+        case "auth/wrong-password":
+          setFormMessage(currentText.wrongPassword);
+          break;
+        case "auth/invalid-credential":
+          setFormMessage(currentText.wrongPassword);
+          break;
+        case "auth/too-many-requests":
+          setFormMessage(currentText.tooManyRequests);
+          break;
+        case "auth/user-disabled":
+          setFormMessage(currentText.userDisabled);
+          break;
+        default:
+          console.error("Login error:", error);
+          setFormMessage(currentText.loginError);
+      }
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const userDoc = await getDoc(doc(db, "users", result.user.uid));
+      
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setMessageType("success");
+        setFormMessage(currentText.loginSuccess);
+
+        // حفظ بيانات المستخدم في الكوكيز
+        document.cookie = `user_name=${encodeURIComponent(userData.name || "")}; path=/; max-age=31536000`;
+        document.cookie = `user_photoURL=${encodeURIComponent(userData.photoURL || "")}; path=/; max-age=31536000`;
+        document.cookie = `user_email=${encodeURIComponent(userData.email || "")}; path=/; max-age=31536000`;
+        document.cookie = `user_phone=${encodeURIComponent(userData.phone || "")}; path=/; max-age=31536000`;
+        document.cookie = `user_role=${encodeURIComponent(userData.role || "")}; path=/; max-age=31536000`;
+
+        // Redirect based on role immediately
+        if (userData.role === "translator") {
+          navigate("/translator/dashboard", { replace: true });
+        } else {
+          navigate("/dashboard", { replace: true });
+        }
+      } else {
+        // New Google user - redirect to dashboard as chinese
+        // حفظ بيانات جوجل الافتراضية
+        document.cookie = `user_name=${encodeURIComponent(result.user.displayName || "")}; path=/; max-age=31536000`;
+        document.cookie = `user_photoURL=${encodeURIComponent(result.user.photoURL || "")}; path=/; max-age=31536000`;
+        document.cookie = `user_email=${encodeURIComponent(result.user.email || "")}; path=/; max-age=31536000`;
+        document.cookie = `user_phone=${encodeURIComponent(result.user.phoneNumber || "")}; path=/; max-age=31536000`;
+        document.cookie = `user_role=chinese; path=/; max-age=31536000`;
+        navigate("/dashboard", { replace: true });
+      }
+    } catch (error) {
+      setIsLoading(false);
+      setMessageType("error");
+      console.error("Google login error:", error);
+      setFormMessage(currentText.loginError);
+    }
   };
 
 
@@ -327,7 +405,7 @@ const Login = () => {
           </div>
 
 
-          <div className="checkbox-group">
+          <div className="checkboxgroup">
             <input type="checkbox" id="keep-logged"/>
             <label htmlFor="keep-logged">{currentText.keep}</label>
           </div>
@@ -340,8 +418,8 @@ const Login = () => {
             {formMessage || " "}
           </p>
 
-          <button type="submit" className="signin-btn">
-            {currentText.signin}
+          <button type="submit" className="signin-btn" disabled={isLoading}>
+            {isLoading ? "..." : currentText.signin}
           </button>
 
         </form>
@@ -352,7 +430,7 @@ const Login = () => {
         </div>
 
 
-        <button type="button" className="google-btn">
+        <button type="button" className="google-btn" onClick={handleGoogleLogin} disabled={isLoading}>
 
           <svg
             xmlns="http://www.w3.org/2000/svg"

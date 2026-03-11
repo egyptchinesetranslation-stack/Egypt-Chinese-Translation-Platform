@@ -1,0 +1,547 @@
+.tp-bg {
+  background: #F5F7FB;
+  min-height: 100vh;
+  padding: 40px 0;
+}
+
+/* MAIN CONTAINER */
+.tp-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* LEFT COLUMN */
+.tp-left {
+  margin-top: 50px;
+  width: 70%;
+  min-width: 0;
+}
+
+/* RIGHT COLUMN */
+.tp-right {
+  
+  width: 30%;
+  min-width: 0;
+  position: relative;
+}
+
+/* PROFILE CARD */
+.tp-profile-card {
+  background: rgba(255,255,255,0.75);
+  border-radius: 24px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+  padding: 32px;
+  position: relative;
+  overflow: visible;
+}
+
+/* GRADIENT HEADER */
+.tp-header {
+  height: 160px;
+  border-radius: 24px 24px 0 0;
+  background: linear-gradient(135deg, #2B5CF6, #3A8DFF);
+  position: relative;
+  overflow: hidden;
+  margin: -32px -32px 0 -32px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+/* SUBTLE PATTERN OVERLAY */
+.tp-header-pattern {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255,255,255,0.08) 0px,
+    rgba(255,255,255,0.08) 2px,
+    transparent 2px,
+    transparent 8px
+  );
+  pointer-events: none;
+}
+/* Avatar wrapper adjustment */
+.tp-avatar-wrapper {
+  margin-top: -40px;
+}
+/* Certificate modal styles */
+.tp-cert-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.tp-cert-modal-content {
+  background: #fff;
+  padding: 24px 16px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* AVATAR */
+.tp-avatar-wrapper {
+  position: absolute;
+  left: 40px;
+  bottom: -45px;
+  z-index: 2;
+}
+
+.tp-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  object-fit: cover;
+  box-shadow: 0 4px 16px rgba(44,62,80,0.08);
+  background: #fff;
+  display: block;
+}
+
+/* ONLINE DOT */
+.tp-online-dot {
+  position: absolute;
+  right: -8px;
+  bottom: 8px;
+  width: 14px;
+  height: 14px;
+  background: #22C55E;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(34,197,94,0.15);
+}
+
+/* PROFILE INFO */
+.tp-profile-info {
+  margin-top: 10px;
+}
+
+/* PROFILE TOP */
+.tp-profile-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.tp-name {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1E293B;
+  margin-bottom: 6px;
+}
+
+.tp-subtitle {
+  font-size: 16px;
+  color: #64748B;
+  margin-bottom: 12px;
+}
+
+/* BADGES */
+.tp-badges {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.tp-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tp-badge-verified {
+  background: #EFF6FF;
+  color: #1D4ED8;
+}
+
+.tp-badge-rating {
+  background: #FFF7ED;
+  color: #EA580C;
+}
+
+.tp-star {
+  margin-right: 4px;
+}
+
+/* INFO ROW */
+.tp-info-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 24px;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #64748B;
+}
+
+.tp-info-row span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+.tp-icon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* TABS */
+.tp-tabs {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 18px;
+  border-bottom: 1.5px solid #E2E8F0;
+}
+
+.tp-tab {
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #94A3B8;
+  font-weight: 500;
+  padding: 0 0 12px 0;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.tp-tab.active {
+  color: #2563EB;
+}
+
+.tp-tab.active::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3px;
+  background: #2563EB;
+  border-radius: 2px;
+}
+
+/* ABOUT SECTION */
+.tp-about-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1E293B;
+  margin-bottom: 8px;
+}
+
+.tp-about-text {
+  color: #475569;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+/* INFO CARDS */
+.tp-info-cards {
+  display: flex;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.tp-info-card {
+  background: #F8FAFC;
+  border-radius: 16px;
+  padding: 20px;
+  flex: 1;
+}
+
+.tp-info-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1E293B;
+  margin-bottom: 10px;
+}
+
+.tp-lang-list div {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.tp-lang-native {
+  color: #22C55E;
+  font-weight: 600;
+}
+
+.tp-cert-list div {
+  font-size: 14px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tp-cert-check {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* SERVICE PRICING SECTION */
+.tp-pricing-section {
+  margin-top: 32px;
+}
+
+.tp-pricing-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1E293B;
+  margin-bottom: 18px;
+}
+
+.tp-pricing-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.tp-pricing-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.tp-pricing-type {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1E293B;
+  margin-bottom: 6px;
+}
+
+.tp-pricing-desc {
+  font-size: 14px;
+  color: #64748B;
+  margin-bottom: 12px;
+}
+
+.tp-pricing-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2563EB;
+}
+
+/* BOOKING CARD */
+.tp-booking-card {
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 40px;
+} 
+
+.tp-booking-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1E293B;
+  margin-bottom: 22px;
+}
+
+/* FORM GROUP - Make form transparent and font modern */
+.tp-form-group {
+  margin-bottom: 18px;
+}
+
+.tp-form-label {
+  font-size: 15px;
+  color: #2563EB;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.tp-form-input {
+  width: 100%;
+  height: 44px;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 10px;
+  font-size: 16px;
+  color: #222;
+  font-weight: 500;
+  padding: 0 12px;
+  background: rgba(255,255,255,0.7);
+  outline: none;
+  margin-top: 4px;
+  transition: border-color 0.2s;
+}
+
+.tp-form-input:focus {
+  border-color: #2563EB;
+}
+
+/* ESTIMATED TOTAL BOX */
+.tp-estimate-box {
+  border-radius: 12px;
+  margin: 18px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.tp-estimate-label {
+  font-size: 14px;
+  color: #64748B;
+  margin-bottom: 6px;
+}
+
+.tp-estimate-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1E40AF;
+}
+
+/* MAIN BUTTON */
+.tp-main-btn {
+  width: 100%;
+  height: 48px;
+  background: linear-gradient(135deg, #F97316, #FB923C);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.tp-main-btn:hover {
+  background: linear-gradient(135deg, #FB923C, #F97316);
+}
+
+.tp-send-icon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* SECONDARY BUTTON */
+.tp-secondary-btn {
+  width: 100%;
+  height: 48px;
+  background: #fff;
+  color: #334155;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.tp-secondary-btn:hover {
+  border-color: #2563EB;
+  color: #2563EB;
+}
+
+/* FOOTER TEXT */
+.tp-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #64748B;
+  margin-top: 10px;
+}
+
+.tp-footer-icon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1100px) {
+  .tp-container {
+    max-width: 100%;
+    padding: 0 16px;
+  }
+  .tp-left {
+    width: 60%;
+  }
+  .tp-right {
+    width: 40%;
+  }
+}
+
+@media (max-width: 900px) {
+  .tp-container {
+    flex-direction: column;
+    gap: 32px;
+  }
+  .tp-left,
+  .tp-right {
+    width: 100%;
+  }
+  .tp-booking-card {
+    position: static;
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .tp-profile-card {
+    padding: 18px;
+  }
+  .tp-header {
+    margin: -18px -18px 0 -18px;
+    height: 120px;
+  }
+  .tp-avatar-wrapper {
+    left: 18px;
+    bottom: -45px;
+  }
+  .tp-info-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tp-info-cards {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .tp-pricing-cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .tp-booking-card {
+    padding: 16px;
+  }
+}
+
+/* Hide scrollbars for cards */
+.tp-profile-card,
+.tp-booking-card {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.tp-profile-card::-webkit-scrollbar,
+.tp-booking-card::-webkit-scrollbar {
+  display: none;
+}

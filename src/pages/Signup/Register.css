@@ -97,13 +97,13 @@
 
 /* Header & Logo */
 .register-card-header {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .register-logo-img {
   max-width: 300px;
   height: auto;
-  margin-bottom: 4px;
+  margin-bottom: -7px;
 }
 
 .register-heading {
@@ -297,6 +297,10 @@
 .register-avatar-box svg {
   width: 22px;
   height: 22px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .register-avatar-box input[type="file"] {
   display: none;
@@ -521,7 +525,7 @@
   display: flex;
   align-items: center;
   text-align: center;
-  margin: 20px 0;
+  margin: 10px 0;
   color: #94a3b8;
   font-size: 11px;
   font-weight: 600;
@@ -561,7 +565,7 @@
 }
 
 .mt-compact {
-  margin-top: 20px;
+  margin-top: 3px;
 }
 
 /* Login Link at bottom of step 1 */

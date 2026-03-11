@@ -156,10 +156,6 @@ body {
   letter-spacing:2px;
 }
 
-.password-hidden {
-  -webkit-text-security: disc;
-}
-
 .password-input::-webkit-credentials-auto-fill-button,
 .password-input::-webkit-textfield-decoration-container {
   visibility: hidden;
@@ -200,21 +196,21 @@ body {
 }
 
 /* Checkbox */
-.checkbox-group {
+.checkboxgroup {
   display: flex;
   align-items: center;
   gap: 8px;
   margin-top: -4px;
 }
 
-.checkbox-group input[type="checkbox"] {
+.checkboxgroup input[type="checkbox"] {
   width: 16px;
   height: 16px;
   accent-color: #f97316;
   cursor: pointer;
 }
 
-.checkbox-group label {
+.checkboxgroup label {
   font-size: 13px;
   color: #64748b;
   cursor: pointer;
