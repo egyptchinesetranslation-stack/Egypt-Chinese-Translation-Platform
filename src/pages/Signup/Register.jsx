@@ -92,9 +92,7 @@ function Register() {
       profilePhotoRequired: "Please upload your profile photo.",
       yearsExpRequired: "Please enter years of experience.",
       shortBioRequired: "Please enter your short bio.",
-      emergencyPriceRequired: "Please enter emergency price.",
-      tourPriceRequired: "Please enter tour guide price.",
-      dailyPriceRequired: "Please enter daily translation price.",
+      atLeastOnePriceRequired: "Please enter at least one service price.",
       certificationsRequired: "Please upload your certifications.",
       createAccountSuccess: "Account created successfully! Redirecting...",
       creatingAccount: "Creating account...",
@@ -143,9 +141,7 @@ function Register() {
       profilePhotoRequired: "请上传头像。",
       yearsExpRequired: "请输入经验年限。",
       shortBioRequired: "请输入个人简介。",
-      emergencyPriceRequired: "请输入紧急情况价格。",
-      tourPriceRequired: "请输入导游价格。",
-      dailyPriceRequired: "请输入日常翻译价格。",
+      atLeastOnePriceRequired: "请至少输入一项服务价格。",
       certificationsRequired: "请上传证书。",
       createAccountSuccess: "账户创建成功！正在跳转...",
       creatingAccount: "正在创建账户...",
@@ -320,21 +316,12 @@ function Register() {
         return;
       }
 
-      if (!String(translatorForm.emergencyPrice).trim()) {
+      const hasEmergency = String(translatorForm.emergencyPrice).trim() !== "";
+      const hasTour = String(translatorForm.tourPrice).trim() !== "";
+      const hasDaily = String(translatorForm.dailyPrice).trim() !== "";
+      if (!hasEmergency && !hasTour && !hasDaily) {
         setMessageType("error");
-        setFormMessage(currentText.emergencyPriceRequired);
-        return;
-      }
-
-      if (!String(translatorForm.tourPrice).trim()) {
-        setMessageType("error");
-        setFormMessage(currentText.tourPriceRequired);
-        return;
-      }
-
-      if (!String(translatorForm.dailyPrice).trim()) {
-        setMessageType("error");
-        setFormMessage(currentText.dailyPriceRequired);
+        setFormMessage(currentText.atLeastOnePriceRequired);
         return;
       }
 

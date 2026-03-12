@@ -120,17 +120,29 @@ function Translators() {
   // Filter translators based on criteria
   const filteredTranslators = translators.filter(translator => {
     const rating = translator.avgRating || 0;
-    const tourGuidePrice = translator.pricing?.tourGuide || 0;
     const years = translator.experienceYears || 0;
+    const emergencyPrice = translator.pricing?.emergency || 0;
+    const tourGuidePrice = translator.pricing?.tourGuide || 0;
+    const dailyPrice = translator.pricing?.daily || 0;
     
     const meetsRating = rating >= minRating;
-    // Only apply price filter if user has changed the slider (not at default max of 300)
-    const meetsPrice = priceRange[1] === 300 || tourGuidePrice <= priceRange[1];
     const meetsExperience = experience === "any" || 
                             (experience === "1-3" && years >= 1 && years <= 3) ||
                             (experience === "4-6" && years >= 4 && years <= 6) ||
                             (experience === "7+" && years >= 7);
-    return meetsRating && meetsPrice && meetsExperience;
+
+    // Service type filter: translator must offer at least one of the selected services
+    const activeFilters = [];
+    if (filters.emergencyAssistance) activeFilters.push(emergencyPrice);
+    if (filters.tourGuide) activeFilters.push(tourGuidePrice);
+    if (filters.dailyTranslation) activeFilters.push(dailyPrice);
+    const meetsService = activeFilters.length === 0 || activeFilters.some(p => p > 0);
+
+    // Price range filter: check against the translator's active service prices
+    const activePrices = [emergencyPrice, tourGuidePrice, dailyPrice].filter(p => p > 0);
+    const meetsPrice = activePrices.length === 0 || activePrices.some(p => p >= priceRange[0] && p <= priceRange[1]);
+
+    return meetsRating && meetsPrice && meetsExperience && meetsService;
   });
 
   const translatorsPerPage = 3;
@@ -304,24 +316,30 @@ function Translators() {
 
                   {/* Services */}
                   <div className="services-section">
-                    <div className="service-row">
-                      <span>{t.tourGuideService}</span>
-                      <span className="service-price">
-                        ${translator.pricing?.tourGuide || 0}{t.perHour}
-                      </span>
-                    </div>
-                    <div className="service-row">
-                      <span>{t.dailyTranslationService}</span>
-                      <span className="service-price">
-                        ${translator.pricing?.daily || 0}{t.perHour}
-                      </span>
-                    </div>
-                    <div className="service-row">
-                      <span>{t.emergencyService}</span>
-                      <span className="service-price">
-                        ${translator.pricing?.emergency || 0}{t.perHour}
-                      </span>
-                    </div>
+                    {(translator.pricing?.tourGuide || 0) > 0 && (
+                      <div className="service-row">
+                        <span>{t.tourGuideService}</span>
+                        <span className="service-price">
+                          ${translator.pricing.tourGuide}{t.perHour}
+                        </span>
+                      </div>
+                    )}
+                    {(translator.pricing?.daily || 0) > 0 && (
+                      <div className="service-row">
+                        <span>{t.dailyTranslationService}</span>
+                        <span className="service-price">
+                          ${translator.pricing.daily}{t.perHour}
+                        </span>
+                      </div>
+                    )}
+                    {(translator.pricing?.emergency || 0) > 0 && (
+                      <div className="service-row">
+                        <span>{t.emergencyService}</span>
+                        <span className="service-price">
+                          ${translator.pricing.emergency}{t.perHour}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Card Footer */}

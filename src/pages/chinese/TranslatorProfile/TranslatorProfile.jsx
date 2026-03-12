@@ -87,10 +87,20 @@ function TranslatorProfile() {
   const [certPreview, setCertPreview] = useState(null);
   const [loading, setLoading] = useState(true);
     // Booking form states
-    const [selectedService, setSelectedService] = useState("tourGuide");
+    const [selectedService, setSelectedService] = useState("");
     const [hours, setHours] = useState(2);
     const [date, setDate] = useState("");
     const [timeStart, setTimeStart] = useState("");
+
+    // Auto-select first available service
+    useEffect(() => {
+      if (!user) return;
+      const p = user.pricing || {};
+      if ((p.tourGuide || 0) > 0) setSelectedService("tourGuide");
+      else if ((p.emergency || 0) > 0) setSelectedService("emergency");
+      else if ((p.daily || 0) > 0) setSelectedService("daily");
+    }, [user]);
+
     // Calculate pricing
     const servicePrice = user?.pricing?.[selectedService] || 0;
     const subtotal = servicePrice * hours;
@@ -277,21 +287,27 @@ function TranslatorProfile() {
               <div className="tp-pricing-section">
                 <div className="tp-pricing-title">{t.servicePricing}</div>
                 <div className="tp-pricing-cards">
-                  <div className="tp-pricing-card">
-                    <div className="tp-pricing-type">{t.emergency}</div>
-                    <div className="tp-pricing-desc">{t.emergencyDesc}</div>
-                    <div className="tp-pricing-price">${user.pricing?.emergency || 0}{t.pricePerHour}</div>
-                  </div>
-                  <div className="tp-pricing-card">
-                    <div className="tp-pricing-type">{t.tourGuide}</div>
-                    <div className="tp-pricing-desc">{t.tourGuideDesc}</div>
-                    <div className="tp-pricing-price">${user.pricing?.tourGuide || 0}{t.pricePerHour}</div>
-                  </div>
-                  <div className="tp-pricing-card">
-                    <div className="tp-pricing-type">{t.daily}</div>
-                    <div className="tp-pricing-desc">{t.dailyDesc}</div>
-                    <div className="tp-pricing-price">${user.pricing?.daily || 0}{t.pricePerHour}</div>
-                  </div>
+                  {(user.pricing?.emergency || 0) > 0 && (
+                    <div className="tp-pricing-card">
+                      <div className="tp-pricing-type">{t.emergency}</div>
+                      <div className="tp-pricing-desc">{t.emergencyDesc}</div>
+                      <div className="tp-pricing-price">${user.pricing.emergency}{t.pricePerHour}</div>
+                    </div>
+                  )}
+                  {(user.pricing?.tourGuide || 0) > 0 && (
+                    <div className="tp-pricing-card">
+                      <div className="tp-pricing-type">{t.tourGuide}</div>
+                      <div className="tp-pricing-desc">{t.tourGuideDesc}</div>
+                      <div className="tp-pricing-price">${user.pricing.tourGuide}{t.pricePerHour}</div>
+                    </div>
+                  )}
+                  {(user.pricing?.daily || 0) > 0 && (
+                    <div className="tp-pricing-card">
+                      <div className="tp-pricing-type">{t.daily}</div>
+                      <div className="tp-pricing-desc">{t.dailyDesc}</div>
+                      <div className="tp-pricing-price">${user.pricing.daily}{t.pricePerHour}</div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -304,9 +320,15 @@ function TranslatorProfile() {
               <div className="tp-form-group">
                 <label className="tp-form-label">{t.selectService}</label>
                 <select className="tp-form-input" value={selectedService} onChange={e => setSelectedService(e.target.value)}>
-                  <option value="tourGuide">{t.tourGuide} (${user.pricing?.tourGuide || 0}{t.pricePerHour})</option>
-                  <option value="emergency">{t.emergency} (${user.pricing?.emergency || 0}{t.pricePerHour})</option>
-                  <option value="daily">{t.daily} (${user.pricing?.daily || 0}{t.pricePerHour})</option>
+                  {(user.pricing?.tourGuide || 0) > 0 && (
+                    <option value="tourGuide">{t.tourGuide} (${user.pricing.tourGuide}{t.pricePerHour})</option>
+                  )}
+                  {(user.pricing?.emergency || 0) > 0 && (
+                    <option value="emergency">{t.emergency} (${user.pricing.emergency}{t.pricePerHour})</option>
+                  )}
+                  {(user.pricing?.daily || 0) > 0 && (
+                    <option value="daily">{t.daily} (${user.pricing.daily}{t.pricePerHour})</option>
+                  )}
                 </select>
               </div>
               <div className="tp-form-group">
