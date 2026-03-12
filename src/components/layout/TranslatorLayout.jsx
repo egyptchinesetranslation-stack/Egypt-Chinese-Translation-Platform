@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../Sidebar/Sidebar";
 import { useLanguage } from "../../context/LanguageContext";
+import { useAuth } from "../../context/AuthContext";
 
 import avatarImage from "../../assets/pngwing.com.png";
 import languageIcon from "../../assets/language-svgrepo-com.svg";
@@ -24,25 +25,7 @@ const text = {
 function TranslatorLayout() {
   const [showLang, setShowLang] = useState(false);
   const { language, changeLanguage } = useLanguage();
-
-  const getCookieValue = (name) => {
-    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]*)'));
-    return match ? decodeURIComponent(match[2]) : '';
-  };
-
-  const [userInfo, setUserInfo] = useState({
-    name: '',
-    photoURL: '',
-    role: '',
-  });
-
-  useEffect(() => {
-    setUserInfo({
-      name: getCookieValue('user_name'),
-      photoURL: getCookieValue('user_photoURL'),
-      role: getCookieValue('user_role'),
-    });
-  }, []);
+  const { currentUser, userData } = useAuth();
 
   const handleChangeLanguage = (lang) => {
     changeLanguage(lang);
@@ -109,14 +92,14 @@ function TranslatorLayout() {
             {/* Avatar */}
             <div className="topbar-user">
               <img
-                src={userInfo.photoURL || avatarImage}
+                src={currentUser?.photoURL || userData?.photoURL || avatarImage}
                 className="topbar-avatar"
                 alt="avatar"
               />
 
               <div className="topbar-user-info">
-                <span className="topbar-name">{userInfo.name || "User"}</span>
-                <span className="topbar-role">{userInfo.role || t.role}</span>
+                <span className="topbar-name">{currentUser?.displayName || userData?.name || "User"}</span>
+                <span className="topbar-role">{userData?.role || t.role}</span>
               </div>
             </div>
           </div>
