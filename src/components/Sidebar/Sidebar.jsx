@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { signOut } from "firebase/auth";
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { useAuth } from "../../context/AuthContext";
 import { useLanguage } from "../../context/LanguageContext";
 
 import logoImage from "../../assets/Logo.png";
@@ -43,8 +45,21 @@ function Sidebar() {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const { language } = useLanguage();
+  const { currentUser } = useAuth();
+  const [chatCount, setChatCount] = useState(0);
 
   const t = text[language];
+
+  // Real-time chat count
+  useEffect(() => {
+    if (!currentUser) return;
+    const q = query(
+      collection(db, "chats"),
+      where("participants", "array-contains", currentUser.uid)
+    );
+    const unsub = onSnapshot(q, (snap) => setChatCount(snap.size));
+    return unsub;
+  }, [currentUser]);
 
   // Update page title when language changes
   useEffect(() => {
@@ -95,7 +110,7 @@ function Sidebar() {
         >
           <MessageSquare size={20} />
           <span>{t.messages}</span>
-          <div className="badge">5</div>
+          {chatCount > 0 && <div className="badge">{chatCount}</div>}
         </Link>
 
         <div className="menu-title">{t.account}</div>
