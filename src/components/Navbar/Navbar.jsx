@@ -178,7 +178,7 @@ function Navbar() {
             </div>
           )}
         </div>
-        <div className={`mobile-menu-icon ${isMobileMenuOpen ? 'open' : ''}`} onClick={toggleMobileMenu}>
+        <div className="mobile-menu-icon" onClick={toggleMobileMenu}>
           <span></span>
           <span></span>
           <span></span>

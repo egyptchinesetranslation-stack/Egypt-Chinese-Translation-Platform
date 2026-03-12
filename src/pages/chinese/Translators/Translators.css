@@ -495,9 +495,14 @@
 }
 
 .page-btn.active {
-  background: #1e3a8a;
-  border-color: #1e3a8a;
+  background: linear-gradient(90deg, #ff8a2b, #ff6a00);
+  border-color: transparent;
   color: white;
+}
+
+.page-btn.active:hover {
+  background: linear-gradient(90deg, #ff8a2b, #ff6a00);
+  filter: brightness(1.05);
 }
 
 .page-btn:disabled {

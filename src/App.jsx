@@ -20,9 +20,9 @@ const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
 /* Chinese Pages */
 const Translators = lazy(() => import("./pages/chinese/Translators/Translators"));
 const TranslatorProfile = lazy(() => import("./pages/chinese/TranslatorProfile/TranslatorProfile"));
-const BookTranslator = lazy(() => import("./pages/chinese/BookTranslator/BookTranslator"));
 const MyRequests = lazy(() => import("./pages/chinese/MyRequests/MyRequests"));
 const Review = lazy(() => import("./pages/chinese/Review/Review"));
+const ReviewRequest = lazy(() => import("./pages/chinese/ReviewRequest/ReviewRequest"));
 const Dashboard = lazy(() => import("./pages/chinese/Dashboard/Dashboard"));
 
 /* Translator Pages */
@@ -57,11 +57,11 @@ function App() {
 
               <Route path="/translator/:id" element={<TranslatorProfile />} />
 
-              <Route path="/book/:id" element={<BookTranslator />} />
-
               <Route path="/my-requests" element={<MyRequests />} />
 
               <Route path="/review/:id" element={<Review />} />
+
+              <Route path="/review-request/:id" element={<ReviewRequest />} />
 
             </Route>
 

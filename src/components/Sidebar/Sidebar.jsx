@@ -12,8 +12,7 @@ import {
   MessageSquare,
   User,
   LogOut,
-  Menu,
-  X
+  Menu
 } from "lucide-react";
 
 import "./Sidebar.css";
@@ -123,7 +122,7 @@ function Sidebar() {
     <>
       {/* Burger Button for Mobile */}
       <button className="burger-btn" onClick={() => setIsOpen(!isOpen)}>
-        {isOpen ? <X size={24} /> : <Menu size={24} />}
+        <Menu size={24} />
       </button>
 
       {/* Desktop Sidebar */}

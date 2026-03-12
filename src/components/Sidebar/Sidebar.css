@@ -160,10 +160,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    top: 13px;
+    left: 12px;
+    background: transparent;
+    box-shadow: none;
   }
 
   .main-content {
-    padding-top: 80px;
+    padding-top: 0;
   }
 }
 
@@ -350,7 +354,6 @@
 /* CONTENT */
 
 .dashboard-content {
-  padding: 30px;
   overflow: auto;
   flex: 1;
 }
@@ -358,7 +361,10 @@
 /* Responsive Topbar */
 @media (max-width: 1023px) {
   .dashboard-topbar {
-    padding: 0 20px 0 80px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 0 15px 0 60px;
   }
   
   .dashboard-content {

@@ -1,0 +1,647 @@
+/* ===== PAGE ===== */
+.td-page {
+  min-height: calc(100vh - 70px);
+  background: #f5f7fb;
+  padding: 40px;
+  box-sizing: border-box;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+.td-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===== LOADING ===== */
+.td-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.td-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #2e5bff;
+  border-radius: 50%;
+  animation: td-spin 0.7s linear infinite;
+}
+
+@keyframes td-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== EMPTY STATE ===== */
+.td-empty {
+  text-align: center;
+  font-size: 13px;
+  color: #8a94a6;
+  padding: 28px 0;
+  margin: 0;
+}
+
+/* ===== CARD ===== */
+.td-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* ══════════════════════════════════
+   TOP STATS ROW
+   ══════════════════════════════════ */
+.td-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.td-stat-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.td-stat-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.td-stat-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #f2f5ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2e5bff;
+}
+
+.td-stat-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.td-stat-label {
+  font-size: 12px;
+  color: #8a94a6;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.td-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* ══════════════════════════════════
+   JOB MANAGEMENT
+   ══════════════════════════════════ */
+.td-jobs-card {
+  margin-bottom: 32px;
+}
+
+.td-jobs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.td-jobs-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* Search */
+.td-search {
+  position: relative;
+}
+
+.td-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8a94a6;
+  pointer-events: none;
+}
+
+.td-search-input {
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #e5e9f2;
+  padding: 0 14px 0 34px;
+  font-size: 13px;
+  background: #f8fafd;
+  outline: none;
+  font-family: inherit;
+  color: #1e293b;
+  width: 200px;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.td-search-input:focus {
+  border-color: #2e5bff;
+}
+
+.td-search-input::placeholder {
+  color: #a0a7b5;
+}
+
+/* Tabs */
+.td-tabs {
+  display: flex;
+  gap: 24px;
+  border-bottom: 1px solid #e5e9f2;
+  margin-bottom: 8px;
+}
+
+.td-tab {
+  padding: 10px 0;
+  font-size: 14px;
+  color: #8a94a6;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.td-tab:hover {
+  color: #1e293b;
+}
+
+.td-tab--active {
+  color: #2e5bff;
+  border-bottom-color: #2e5bff;
+}
+
+.td-tab-badge {
+  background: #ff4d4f;
+  color: #fff;
+  border-radius: 20px;
+  font-size: 11px;
+  padding: 2px 6px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Job list */
+.td-jobs-list {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.td-jobs-list::-webkit-scrollbar {
+  width: 5px;
+}
+.td-jobs-list::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+/* ── Job Item ── */
+.td-job-item {
+  background: #f9fbff;
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.td-job-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.td-job-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.td-job-avatar--placeholder {
+  background: #e6f0ff;
+  color: #2e5bff;
+  font-weight: 700;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.td-job-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.td-job-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.td-job-service {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.td-job-meta {
+  font-size: 12px;
+  color: #8a94a6;
+}
+
+.td-job-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-shrink: 0;
+}
+
+/* Timer */
+.td-job-timer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.td-job-timer-label {
+  font-size: 10px;
+  color: #a0a7b5;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.td-job-timer-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ff4d4f;
+  font-variant-numeric: tabular-nums;
+}
+
+.td-job-timer-value--expired {
+  color: #9ca3af;
+}
+
+/* Buttons */
+.td-job-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.td-btn-reject {
+  background: #fff;
+  border: 1px solid #e5e9f2;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 13px;
+  color: #1e293b;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 500;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.td-btn-reject:hover {
+  background: #f5f7fb;
+  border-color: #d1d5db;
+}
+
+.td-btn-accept {
+  background: linear-gradient(90deg, #ff8a00, #ff6a00);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.td-btn-accept:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.td-btn-accept:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ══════════════════════════════════
+   BOTTOM GRID
+   ══════════════════════════════════ */
+.td-bottom-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 24px;
+}
+
+/* ── Active Services ── */
+.td-active-card {
+  padding: 24px;
+}
+
+.td-active-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.td-active-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.td-active-count {
+  font-size: 12px;
+  color: #8a94a6;
+  background: #f2f5ff;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.td-active-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f2f7;
+}
+
+.td-active-item:last-child {
+  border-bottom: none;
+}
+
+.td-active-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.td-active-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.td-active-avatar--initials {
+  background: linear-gradient(135deg, #2e5bff, #1e3a8a);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.td-active-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.td-active-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.td-active-sub {
+  font-size: 12px;
+  color: #8a94a6;
+}
+
+.td-active-chat {
+  color: #ff7a00;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+
+.td-active-chat:hover {
+  opacity: 0.8;
+}
+
+/* ── Quick Earnings ── */
+.td-earnings-card {
+  background: linear-gradient(135deg, #1e3a8a, #2f4f9f);
+  border-radius: 18px;
+  padding: 28px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.td-earnings-label {
+  font-size: 14px;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.td-earnings-amount {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.td-earnings-withdraw {
+  align-self: flex-start;
+  background: #fff;
+  color: #1e3a8a;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  transition: opacity 0.15s;
+}
+
+.td-earnings-withdraw:hover {
+  opacity: 0.9;
+}
+
+.td-earnings-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.td-earnings-panel {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.td-earnings-panel-label {
+  font-size: 12px;
+  opacity: 0.7;
+  font-weight: 500;
+}
+
+.td-earnings-panel-value {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* ══════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════ */
+@media (max-width: 1024px) {
+  .td-stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .td-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .td-page {
+    padding: 16px;
+  }
+
+  .td-stats-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .td-stat-card {
+    padding: 16px;
+  }
+
+  .td-stat-value {
+    font-size: 18px;
+  }
+
+  .td-card {
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+  .td-jobs-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .td-search-input {
+    width: 100%;
+  }
+
+  .td-search {
+    width: 100%;
+  }
+
+  .td-job-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .td-job-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .td-bottom-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .td-earnings-card {
+    padding: 22px;
+  }
+
+  .td-earnings-amount {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .td-stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .td-tabs {
+    gap: 14px;
+  }
+
+  .td-tab {
+    font-size: 13px;
+  }
+
+  .td-job-actions {
+    width: 100%;
+  }
+
+  .td-btn-reject,
+  .td-btn-accept {
+    flex: 1;
+    text-align: center;
+  }
+}

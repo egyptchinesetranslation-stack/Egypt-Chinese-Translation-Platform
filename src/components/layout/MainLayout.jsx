@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
+import ReviewModal from "../ReviewModal/ReviewModal";
 
 function MainLayout() {
   return (
@@ -10,6 +11,8 @@ function MainLayout() {
       <main>
         <Outlet />
       </main>
+
+      <ReviewModal />
 
     </div>
   );

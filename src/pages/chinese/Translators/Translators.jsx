@@ -334,7 +334,7 @@ function Translators() {
                     >
                       {t.viewProfile}
                     </button>
-                    <button className="message-btn">
+                    <button className="message-btn" onClick={(e) => { e.stopPropagation(); navigate(`/dashboard?chat=${translator.id}`); }}>
                       <MessageCircle size={18} />
                     </button>
                   </div>

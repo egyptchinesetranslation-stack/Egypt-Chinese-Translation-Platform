@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { db } from "../../../firebase";
 import { doc, getDoc } from "firebase/firestore";
 import "./TranslatorProfile.css";
@@ -38,6 +38,7 @@ const text = {
     userNotFound: "User not found.",
     close: "Close",
     hours: "Hours",
+    timeStart: "Start Time",
     fullDay: "Full Day"
   },
   zh: {
@@ -71,12 +72,14 @@ const text = {
     userNotFound: "未找到用户。",
     close: "关闭",
     hours: "小时",
+    timeStart: "开始时间",
     fullDay: "全天"
   }
 };
 
 function TranslatorProfile() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { language, changeLanguage } = useLanguage();
   const t = text[language];
   const [user, setUser] = useState(null);
@@ -87,6 +90,7 @@ function TranslatorProfile() {
     const [selectedService, setSelectedService] = useState("tourGuide");
     const [hours, setHours] = useState(2);
     const [date, setDate] = useState("");
+    const [timeStart, setTimeStart] = useState("");
     // Calculate pricing
     const servicePrice = user?.pricing?.[selectedService] || 0;
     const subtotal = servicePrice * hours;
@@ -310,6 +314,10 @@ function TranslatorProfile() {
                 <input type="date" className="tp-form-input" value={date} onChange={e => setDate(e.target.value)} />
               </div>
               <div className="tp-form-group">
+                <label className="tp-form-label">{t.timeStart}</label>
+                <input type="time" className="tp-form-input" value={timeStart} onChange={e => setTimeStart(e.target.value)} />
+              </div>
+              <div className="tp-form-group">
                 <label className="tp-form-label">{t.hours}</label>
                 <input type="number" min={1} className="tp-form-input" value={hours} onChange={e => setHours(Number(e.target.value))} />
               </div>
@@ -325,7 +333,31 @@ function TranslatorProfile() {
                 <div className="tp-estimate-label">{t.estimateTotal}</div>
                 <div className="tp-estimate-price">${total}</div>
               </div>
-              <button type="submit" className="tp-main-btn">
+              <button
+                type="button"
+                className="tp-main-btn"
+                disabled={!date || !timeStart || hours < 1}
+                onClick={() => {
+                const serviceLabels = { tourGuide: language === 'en' ? 'Tour Guide' : '导游', emergency: language === 'en' ? 'Emergency' : '紧急援助', daily: language === 'en' ? 'Daily Assistance' : '日常协助' };
+                navigate(`/review-request/${id}`, {
+                  state: {
+                    translatorId: id,
+                    translatorName: user.name,
+                    translatorPhoto: user.photoURL,
+                    translatorRating: user.avgRating,
+                    translatorReviews: user.totalReviews,
+                    selectedService,
+                    serviceLabel: serviceLabels[selectedService],
+                    servicePrice,
+                    date,
+                    timeStart,
+                    hours,
+                    subtotal,
+                    serviceFee,
+                    total,
+                  }
+                });
+              }}>
                 {t.sendRequest}
                 <span className="tp-send-icon">
                   <svg width="22" height="22" fill="none">
@@ -333,7 +365,7 @@ function TranslatorProfile() {
                   </svg>
                 </span>
               </button>
-              <button type="button" className="tp-secondary-btn">
+              <button type="button" className="tp-secondary-btn" onClick={() => navigate(`/dashboard?chat=${id}`)}>
                 {t.contactDirectly}
               </button>
             </form>
